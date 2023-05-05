@@ -10,3 +10,5 @@ device.json
 go-cqhttp
 logs/
 session.token
+.vscode
+itchat.pkl
