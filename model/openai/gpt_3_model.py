@@ -10,15 +10,15 @@ import time
 user_session = dict()
 
 # OpenAI对话模型API (可用)
-class OpenAIModel(Model):
+class Gpt_3_Model(Model):
     def __init__(self):
-        openai.api_key = model_conf(const.OPEN_AI).get('api_key')
-        api_base = model_conf(const.OPEN_AI).get('api_base')
+        openai.api_key = model_conf(const.GPT_3).get('api_key')
+        api_base = model_conf(const.GPT_3).get('api_base')
         if api_base:
             openai.api_base = api_base
         log.info("[OPEN_AI] api_base={}".format(openai.api_base))
-        self.model = model_conf(const.OPEN_AI).get('model', 'text-davinci-003')
-        proxy = model_conf(const.OPEN_AI).get('proxy')
+        self.model = model_conf(const.GPT_3).get('model', 'text-davinci-003')
+        proxy = model_conf(const.GPT_3).get('proxy')
         if proxy:
             openai.proxy = proxy
 
@@ -53,11 +53,11 @@ class OpenAIModel(Model):
             response = openai.Completion.create(
                 model=self.model,  # 对话模型的名称
                 prompt=query,
-                temperature=model_conf(const.OPEN_AI).get("temperature", 0.75),  # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
+                temperature=model_conf(const.GPT_3).get("temperature", 0.75),  # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
                 #max_tokens=4096,  # 回复最大的字符数，为输入和输出的总数
-                #top_p=model_conf(const.OPEN_AI).get("top_p", 0.7),,  #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
-                frequency_penalty=model_conf(const.OPEN_AI).get("frequency_penalty", 0.0),  # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
-                presence_penalty=model_conf(const.OPEN_AI).get("presence_penalty", 1.0),  # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
+                #top_p=model_conf(const.GPT_3).get("top_p", 0.7),,  #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
+                frequency_penalty=model_conf(const.GPT_3).get("frequency_penalty", 0.0),  # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
+                presence_penalty=model_conf(const.GPT_3).get("presence_penalty", 1.0),  # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
                 stop=["\n\n\n"]
             )
             res_content = response.choices[0]['text'].strip().replace('<|endoftext|>', '')
@@ -86,11 +86,11 @@ class OpenAIModel(Model):
             res = openai.Completion.create(
                 model= "text-davinci-003",  # 对话模型的名称
                 prompt=new_query,
-                temperature=model_conf(const.OPEN_AI).get("temperature", 0.75),  # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
-                max_tokens=model_conf(const.OPEN_AI).get("conversation_max_tokens", 3000),  # 回复最大的字符数，为输入和输出的总数,davinci的流式对话需要启用这属性，不然对话会断流
-                #top_p=model_conf(const.OPEN_AI).get("top_p", 0.7),,  #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
-                frequency_penalty=model_conf(const.OPEN_AI).get("frequency_penalty", 0.0),  # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
-                presence_penalty=model_conf(const.OPEN_AI).get("presence_penalty", 1.0),  # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
+                temperature=model_conf(const.GPT_3).get("temperature", 0.75),  # 熵值，在[0,1]之间，越大表示选取的候选词越随机，回复越具有不确定性，建议和top_p参数二选一使用，创意性任务越大越好，精确性任务越小越好
+                max_tokens=model_conf(const.GPT_3).get("conversation_max_tokens", 3000),  # 回复最大的字符数，为输入和输出的总数,davinci的流式对话需要启用这属性，不然对话会断流
+                #top_p=model_conf(const.GPT_3).get("top_p", 0.7),,  #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
+                frequency_penalty=model_conf(const.GPT_3).get("frequency_penalty", 0.0),  # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
+                presence_penalty=model_conf(const.GPT_3).get("presence_penalty", 1.0),  # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
                 stream=True
             )
             full_response = ""
@@ -187,7 +187,7 @@ class Session(object):
         :param user_id: from user id
         :return: query content with conversaction
         '''
-        prompt = model_conf(const.OPEN_AI).get("character_desc", "")
+        prompt = model_conf(const.GPT_3).get("character_desc", "")
         if prompt:
             prompt += "<|endoftext|>\n\n\n"
         session = user_session.get(user_id, None)
@@ -201,7 +201,7 @@ class Session(object):
 
     @staticmethod
     def save_session(query, answer, user_id):
-        max_tokens = model_conf(const.OPEN_AI).get("conversation_max_tokens")
+        max_tokens = model_conf(const.GPT_3).get("conversation_max_tokens")
         if not max_tokens:
             # default 3000
             max_tokens = 1000

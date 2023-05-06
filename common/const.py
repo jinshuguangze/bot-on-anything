@@ -14,8 +14,9 @@ FEISHU = "feishu"
 DISCORD = "discord"
 
 # model
-OPEN_AI = "openai"
-CHATGPT = "chatgpt"
+GPT_3 = "gpt-3"
+GPT_3_5 = "gpt-3.5"
+GPT_4 = "gpt-4"
 BAIDU = "baidu"
 BING = "bing"
 BARD = "bard"

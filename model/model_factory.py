@@ -11,22 +11,27 @@ def create_bot(model_type):
     :return: channel instance
     """
 
-    if model_type == const.OPEN_AI:
+    if model_type == const.GPT_3:
         # OpenAI 官方对话模型API (gpt-3.0)
-        from model.openai.open_ai_model import OpenAIModel
-        return OpenAIModel()
+        from model.openai.gpt_3_model import Gpt_3_Model
+        return Gpt_3_Model()
 
-    elif model_type == const.CHATGPT:
+    elif model_type == const.GPT_3_5:
         # ChatGPT API (gpt-3.5-turbo)
-        from model.openai.chatgpt_model import ChatGPTModel
-        return ChatGPTModel()
-
+        from model.openai.gpt_3_5_model import Gpt_3_5_Model
+        return Gpt_3_5_Model()
+    
+    elif model_type == const.GPT_4:
+        # ChatGPT API (gpt-4)
+        from model.openai.gpt_4_model import Gpt_4_Model
+        return Gpt_4_Model()
+    
     elif model_type == const.BAIDU:
         from model.baidu.yiyan_model import YiyanModel
         return YiyanModel()
 
     elif model_type == const.BING:
-        from model.bing.new_bing_model import BingModel
+        from model.microsoft.new_bing_model import BingModel
         return BingModel()
 
     elif model_type == const.BARD:

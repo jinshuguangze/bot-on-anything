@@ -6,7 +6,7 @@ from common import log
 from EdgeGPT import Chatbot, ConversationStyle
 from ImageGen import ImageGen
 from common import functions
-from model.bing.jailbroken_sydney import SydneyBot
+from model.microsoft.jailbroken_sydney import SydneyBot
 
 user_session = dict()
 suggestion_session = dict()
